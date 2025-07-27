@@ -2,13 +2,14 @@ ARG BUILD_FROM=ghcr.io/hassio-addons/base-nodejs:0.1.1
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
-# Required for webpack config of NPM with Node.js 22
+# Required for webpack config of NPM
 ENV NODE_OPTIONS="--openssl-legacy-provider"
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Copy patches
+# Copy Python requirements file & patches
+COPY requirements.txt /tmp/
 COPY patches/*.patch /usr/src/
 
 # Setup base
@@ -24,18 +25,17 @@ RUN \
         python3-dev=3.11.6-r1 \
     \
     && apk add --no-cache \
-        apache2-utils=2.4.63-r4 \
-        certbot=4.0.0-r0 \
-        libcap=2.76-r0 \
+        apache2-utils=2.4.58-r1 \
+        certbot=2.7.4-r0 \
+        libcap=2.69-r1 \
         logrotate=3.21.0-r1 \
-        nginx-mod-stream=1.28.0-r3 \
-        nginx=1.28.0-r3 \
-        nodejs=22.16.0-r2 \
-        npm=11.3.0-r0 \
-        openssl=3.5.1-r0 \
-        py3-pip=25.1.1-r0 \
-        python3=3.12.11-r0 \
-        yarn=1.22.22-r1 \
+        nginx-mod-stream=1.24.0-r14 \
+        nginx=1.24.0-r14 \
+        openssl=3.1.4-r3 \
+        py3-pip=23.3.1-r0 \
+        python3=3.11.6-r1 \
+    \
+    && pip3 install -r /tmp/requirements.txt \
     \
     && yarn global add modclean \
     \
@@ -50,8 +50,8 @@ RUN \
         patch -d /app -p 1 < "${i}"; done \
     \
     && cd /app/frontend \
-    && yarn install --ignore-engines --network-timeout 100000 \
-    && yarn build --ignore-engines \
+    && yarn install \
+    && yarn build \
     && rm -rf node_modules \
     \
     && mkdir -p /opt/nginx-proxy-manager/frontend \
