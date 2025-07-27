@@ -20,7 +20,6 @@ RUN \
         build-base \
         git \
         libffi-dev \
-        openssl-dev \
         patch \
         python3-dev \
     \
