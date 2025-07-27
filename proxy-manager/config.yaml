@@ -1,6 +1,6 @@
 ---
-name: Nginx Proxy Manager
-version: dev
+name: Nginx Proxy Manager 1.0.1
+version: 1.0.1-custom
 slug: nginxproxymanager
 description: Manage Nginx proxy hosts with a simple, powerful interface
 url: https://github.com/hassio-addons/addon-nginx-proxy-manager
