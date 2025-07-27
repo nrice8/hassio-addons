@@ -16,7 +16,13 @@ COPY patches/*.patch /usr/src/
 ARG NGINX_PROXY_MANAGER_VERSION="v2.10.4"
 # hadolint ignore=DL3003,DL3042
 RUN \
-    apk add --no-cache --virtual .build-dependencies \
+    # Stabilize Alpine repo mirrors and update packages
+    sed -i 's|http://dl-cdn.alpinelinux.org|http://dl-3.alpinelinux.org|g' /etc/apk/repositories \
+    && apk update \
+    && apk upgrade \
+    && rm -rf /var/cache/apk/* \
+    \
+    && apk add --no-cache --virtual .build-dependencies \
         build-base \
         git \
         libffi-dev \
