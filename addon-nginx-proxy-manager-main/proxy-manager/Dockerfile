@@ -1,4 +1,4 @@
-ARG BUILD_FROM=ghcr.io/hassio-addons/base-nodejs:0.1.1
+ARG BUILD_FROM=ghcr.io/hassio-addons/base-nodejs:0.2.2
 # hadolint ignore=DL3006
 FROM ${BUILD_FROM}
 
@@ -16,29 +16,24 @@ COPY patches/*.patch /usr/src/
 ARG NGINX_PROXY_MANAGER_VERSION="v2.10.4"
 # hadolint ignore=DL3003,DL3042
 RUN \
-    # Stabilize Alpine repo mirrors and update packages
-    sed -i 's|http://dl-cdn.alpinelinux.org|http://dl-3.alpinelinux.org|g' /etc/apk/repositories \
-    && apk update \
-    && apk upgrade \
-    && rm -rf /var/cache/apk/* \
-    \
-    && apk add --no-cache --virtual .build-dependencies \
-        build-base \
-        git \
-        libffi-dev \
-        patch \
-        python3-dev \
+    apk add --no-cache --virtual .build-dependencies \
+        build-base=0.5-r3 \
+        git=2.43.5-r0 \
+        libffi-dev=3.4.4-r3 \
+        openssl-dev=3.1.7-r0 \
+        patch=2.7.6-r10 \
+        python3-dev=3.11.10-r0 \
     \
     && apk add --no-cache \
-        apache2-utils \
-        certbot \
-        libcap \
-        logrotate \
-        nginx-mod-stream \
-        nginx \
-        openssl \
-        py3-pip \
-        python3 \
+        apache2-utils=2.4.62-r0 \
+        certbot=2.7.4-r0 \
+        libcap=2.69-r1 \
+        logrotate=3.21.0-r1 \
+        nginx-mod-stream=1.24.0-r16 \
+        nginx=1.24.0-r16 \
+        openssl=3.1.7-r0 \
+        py3-pip=23.3.1-r0 \
+        python3=3.11.10-r0 \
     \
     && pip3 install -r /tmp/requirements.txt \
     \
